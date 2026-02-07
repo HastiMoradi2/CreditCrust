@@ -1,6 +1,5 @@
 import { INGREDIENTS } from "../data/ingredients";
 import { hasAllIngredients, ownedCount } from "../logic/rules";
-import.meta.env.BASE_URL;
 
 export default function Kitchen({ state, setPage }) {
   const count = ownedCount(state, INGREDIENTS);
@@ -10,44 +9,55 @@ export default function Kitchen({ state, setPage }) {
   const layers = [...INGREDIENTS].sort((a, b) => a.stage - b.stage);
 
   return (
-    <div className="page-kitchen">
-      <h2 className="title">Kitchen 🍕</h2>
+      <div className="page-kitchen">
+        <h2 className="title">Kitchen 🍕</h2>
 
-      <div className="kitchen-ui">
-        <div className="pizza-frame">
+        <div className="kitchen-ui">
+          <div className="pizza-frame">
 
-          {layers.map((ing) => {
-            const owned = state.inventory.includes(ing.id);
+            {layers.map((ing) => {
+              const owned = state.inventory.includes(ing.id);
 
-            return (
-                <img
-                    key={ing.id}
-                    // This ensures the path is always /CreditCrust/mushroom.png
-                    src={`${import.meta.env.BASE_URL}${ing.id}.png`}
-                    alt={ing.name}
-                    className="pizza-layer"
-                    // ... rest of your code
-                />
-            );
-          })}
-        </div>
+              return (
+                  // Inside layers.map in Kitchen.jsx
+                  <img
+                      key={ing.id}
+                      /*
+                         This resolves to: /CreditCrust/pizza/i-mushroom.png
+                      */
+                      src={`${import.meta.env.BASE_URL}pizza/i-${ing.id}.png`}
+                      alt={ing.name}
+                      className={`pizza-layer ${owned ? "show" : "hide"}`}
+                      style={{
+                        zIndex: ing.stage,
+                        transform: ing.id === "dough" ? "scale(0.7)" : "scale(1)",
+                        // THESE THREE LINES FIX THE "MESSED UP" VISUALS:
+                        position: 'absolute',
+                        top: 0,
+                        left: 0
+                      }}
+                      draggable={false}
+                  />
+              );
+            })}
+          </div>
 
-        <div className="kitchen-info">
-          <p>Ingredients owned: {count}/{INGREDIENTS.length}</p>
+          <div className="kitchen-info">
+            <p>Ingredients owned: {count}/{INGREDIENTS.length}</p>
 
-          {!done ? (
-            <p>Buy all ingredients to unlock “Make Pizza”.</p>
-          ) : (
-            <button className="btn" onClick={() => setPage("final")}>
-              Make Pizza 🎉
+            {!done ? (
+                <p>Buy all ingredients to unlock “Make Pizza”.</p>
+            ) : (
+                <button className="btn" onClick={() => setPage("final")}>
+                  Make Pizza 🎉
+                </button>
+            )}
+
+            <button className="back-btn" onClick={() => setPage("home")}>
+              Back
             </button>
-          )}
-
-          <button className="back-btn" onClick={() => setPage("home")}>
-            Back
-          </button>
+          </div>
         </div>
       </div>
-    </div>
   );
 }
