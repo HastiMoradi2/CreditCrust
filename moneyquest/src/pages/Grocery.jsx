@@ -117,12 +117,13 @@ export default function Grocery({ state, setState, setPage }) {
                 key={ing.id}
                 className={`ingredient-card ${owned ? "owned" : ""} ${locked && !owned ? "locked" : ""}`}
               >
-                <img
-                  src={`/${ing.id}.png`}
-                  alt={ing.name}
-                  className="ingredient-img"
-                  onError={(e) => (e.currentTarget.style.display = "none")}
-                />
+                  <img
+                      // This combines "/CreditCrust/" + "mushroom.png" automatically
+                      src={`${import.meta.env.BASE_URL}${ing.id}.png`}
+                      alt={ing.name}
+                      className="ingredient-img"
+                      onError={(e) => (e.currentTarget.style.display = "none")}
+                  />
 
                 <div className="ingredient-info">
                   <div className="ingredient-title">{ing.name}</div>

@@ -1,5 +1,6 @@
 import { INGREDIENTS } from "../data/ingredients";
 import { hasAllIngredients, ownedCount } from "../logic/rules";
+import.meta.env.BASE_URL;
 
 export default function Kitchen({ state, setPage }) {
   const count = ownedCount(state, INGREDIENTS);
@@ -19,18 +20,14 @@ export default function Kitchen({ state, setPage }) {
             const owned = state.inventory.includes(ing.id);
 
             return (
-              <img
-                key={ing.id}
-                src={`/pizza/i-${ing.id}.png`}
-                alt={ing.name}
-                className={`pizza-layer ${owned ? "show" : "hide"}`}
-                style={{
-                  zIndex: ing.stage,
-                  transform: ing.id === "dough" ? "scale(0.7)" : "scale(1)"
-                }}
-
-                draggable={false}
-              />
+                <img
+                    key={ing.id}
+                    // This ensures the path is always /CreditCrust/mushroom.png
+                    src={`${import.meta.env.BASE_URL}${ing.id}.png`}
+                    alt={ing.name}
+                    className="pizza-layer"
+                    // ... rest of your code
+                />
             );
           })}
         </div>
